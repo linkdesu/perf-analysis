@@ -35,7 +35,7 @@ fn bloom_test() {
     let mut bf = BloomFilter::new_with_data(239527, 17, &bloom_filter);
 
     debug!("Check if string is contained in filter.");
-    bf.contains(b"das.bit");
+    //bf.contains(b"das.bit");
 }
 
 fn load_test() {

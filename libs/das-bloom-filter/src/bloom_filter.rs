@@ -35,18 +35,23 @@ impl BloomFilter {
         let mut bv = vec![false; bits_count as usize];
         let mut i = 0;
         let last_index = bits_count as usize;
+        /*
         'outter: for c in b_u8 {
             for j in 0..8 {
-                bv[i] = if c & (1 << (7 - j)) == 0 { false } else { true };
+                bv[i] = c&(1<<(7-j)) != 0;
                 i += 1;
                 if i >= last_index {
-                    for k in 0..(last_index % 8) {
-                        bv[last_index - 1 - k] = if c & (1 << k) == 0 { false } else { true };
+                    for k in 0..(last_index%8) {
+                        bv[last_index-1-k] = c&(1<<k) != 0;
                     }
                     break 'outter;
                 }
             }
         }
+        */
+        let len_u8 = b_u8.len();
+        let prefix_u8 = b_u8.get(..len_u8-1).unwrap();
+        let last = b_u8[len_u8-1];
         Self {
             bits: bv,
             hash_fn_count: hash_fn_count as usize,
