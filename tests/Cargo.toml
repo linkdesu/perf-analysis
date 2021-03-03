@@ -9,3 +9,5 @@ edition = "2018"
 ckb-tool = "0.2"
 ckb-testtool = "0.2"
 hex = "0.4.2"
+das-bloom-filter = { path = "../libs/das-bloom-filter", features = ["std"] }
+rand = "0.8.3"

@@ -169,6 +169,7 @@ mod tests {
     use super::*;
     use rand::distributions::Alphanumeric;
     use rand::{thread_rng, Rng};
+    use hex::encode;
 
     #[cfg(feature = "std")]
     fn optimal_bits_count(capacity: f64, err_rate: f64) -> f64 {
@@ -188,8 +189,8 @@ mod tests {
     #[cfg(feature = "std")]
     //#[test]
     fn calculate_params() {
-        let bits_count = optimal_bits_count(10_000f64, 0.00001);
-        let hash_fn_count = optimal_hashers_count(0.00001);
+        let bits_count = optimal_bits_count(5_000f64, 0.0001);
+        let hash_fn_count = optimal_hashers_count(0.0001);
 
         println!("\nbits_count = {:#?}", bits_count);
         println!("hash_fn_count = {:#?}", hash_fn_count);
@@ -208,12 +209,14 @@ mod tests {
 
     #[test]
     fn test_export_bloom_filter() {
+        //let bits_count = optimal_bits_count(5_000f64, 0.0001);
+        //let hash_fn_count = optimal_hashers_count(0.0001);
         let mut all_items = Vec::new();
-        let mut bf = BloomFilter::new(239627, 17);
+        let mut bf = BloomFilter::new(95851, 14);
         //let mut bf = BloomFilter::new(1438, 10);
 
         // Insert 10000 random items.
-        for _ in 1..10000 {
+        for _ in 1..1000 {
             let item: String = thread_rng()
                 .sample_iter(&Alphanumeric)
                 .map(char::from)
@@ -225,7 +228,7 @@ mod tests {
         bf.insert(b"das");
 
         let filter = bf.export_bit_u8();
-        println!("filter: {:?}", filter);
+        println!("filter: {}", hex::encode(filter));
         /*
         let bf2 = BloomFilter::new_with_data(239627, 17, filter.as_slice());
         //let bf2 = BloomFilter::new_with_data(239627, 17, filter.clone());

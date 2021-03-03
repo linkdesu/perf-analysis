@@ -3114,7 +3114,9 @@ version = "0.1.0"
 dependencies = [
  "ckb-testtool",
  "ckb-tool",
+ "das-bloom-filter",
  "hex",
+ "rand 0.8.3",
 ]
 
 [[package]]
