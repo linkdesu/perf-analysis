@@ -3,7 +3,8 @@ use ckb_testtool::context::Context;
 use ckb_tool::ckb_types::{bytes::Bytes, core::TransactionBuilder, packed::*, prelude::*};
 use hex;
 
-const MAX_CYCLES: u64 = 10_000_000;
+// const MAX_CYCLES: u64 = 10_000_000_000;
+const MAX_CYCLES: u64 = u64::MAX;
 
 #[test]
 fn test_success() {
