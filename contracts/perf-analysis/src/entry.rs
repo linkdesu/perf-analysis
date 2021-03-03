@@ -22,7 +22,7 @@ fn bloom_test() -> Result<(), Error> {
     debug!("First 10 bytes: {:?}", bloom_filter.get(..10));
 
     debug!("Restore bloom filter from bits: {}", u_first);
-    //let bf = BloomFilter::new_with_data(u_first as u64, u_second as u64, &bloom_filter);
+    let bf = BloomFilter::new_with_data(u_first as u64, u_second as u64, &bloom_filter);
 
     debug!("Check if string is contained in filter.");
     //bf.contains(b"das.bit");

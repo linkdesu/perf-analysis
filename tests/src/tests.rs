@@ -60,14 +60,17 @@ fn test_success() {
 
     // 上面都是无关紧要的构造交易的代码可以忽略
 
-    let bits_count = optimal_bits_count(2_500f64, 0.0005);
-    let hash_fn_count = optimal_hashers_count(0.0001);
+    let rate = 0.0001;
+    let sum = 5_000f64;
+    let bits_count = optimal_bits_count(sum, rate);
+    let hash_fn_count = optimal_hashers_count(rate);
     let mut all_items = Vec::new();
     let mut bf = BloomFilter::new(bits_count as u64, hash_fn_count as u64);
     //let mut bf = BloomFilter::new(1438, 10);
 
     // Insert 10000 random items.
-    for _ in 1..1000 {
+    let s = (sum * 0.8) as u64;
+    for _ in 1..s {
         let item: String = thread_rng()
             .sample_iter(&Alphanumeric)
             .map(char::from)

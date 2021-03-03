@@ -33,22 +33,20 @@ impl BloomFilter {
     }
 
     pub fn new_with_data(bits_count: u64, hash_fn_count: u64, b_u8: &[u8]) -> Self {
-        let mut bv = vec![false; bits_count as usize];
-        let mut i = 0;
+        let mut bv = Vec::new();
         let bits_count_u = bits_count as usize;
         let len_minus1 = b_u8.len() - 1;
         let prefix_u8 = b_u8.get(..len_minus1).unwrap();
         let last = b_u8[len_minus1];
         for c in prefix_u8 {
             for j in -7..1 {
-                bv[i] = c&(1<<(-j)) != 0;
-                i += 1;
+                bv.push(c&(1<<(-j)) != 0);
             }
         }
-        let m = bits_count_u % 8;
-        let n = bits_count_u - 1;
-        for k in 0..m {
-            bv[n-k] = last&(1<<k) != 0;
+        let m = (bits_count_u % 8) as i32;
+        let n = 1 - m;
+        for k in n..1 {
+            bv.push(last&(1<<(-k)) != 0);
         }
         Self {
             bits: bv,
