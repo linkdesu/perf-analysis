@@ -1,5 +1,6 @@
 use blake2b_ref::{Blake2b, Blake2bBuilder};
 use std::prelude::v1::*;
+use ckb_std::{ckb_constants::Source, debug, error::SysError, syscalls};
 
 fn make_hashers() -> Vec<Blake2b> {
     vec![
@@ -34,24 +35,21 @@ impl BloomFilter {
     pub fn new_with_data(bits_count: u64, hash_fn_count: u64, b_u8: &[u8]) -> Self {
         let mut bv = vec![false; bits_count as usize];
         let mut i = 0;
-        let last_index = bits_count as usize;
-        /*
-        'outter: for c in b_u8 {
-            for j in 0..8 {
-                bv[i] = c&(1<<(7-j)) != 0;
+        let bits_count_u = bits_count as usize;
+        let len_minus1 = b_u8.len() - 1;
+        let prefix_u8 = b_u8.get(..len_minus1).unwrap();
+        let last = b_u8[len_minus1];
+        for c in prefix_u8 {
+            for j in -7..1 {
+                bv[i] = c&(1<<(-j)) != 0;
                 i += 1;
-                if i >= last_index {
-                    for k in 0..(last_index%8) {
-                        bv[last_index-1-k] = c&(1<<k) != 0;
-                    }
-                    break 'outter;
-                }
             }
         }
-        */
-        let len_u8 = b_u8.len();
-        let prefix_u8 = b_u8.get(..len_u8-1).unwrap();
-        let last = b_u8[len_u8-1];
+        let m = bits_count_u % 8;
+        let n = bits_count_u - 1;
+        for k in 0..m {
+            bv[n-k] = last&(1<<k) != 0;
+        }
         Self {
             bits: bv,
             hash_fn_count: hash_fn_count as usize,

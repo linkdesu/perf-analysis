@@ -16,7 +16,7 @@ fn bloom_test() -> Result<(), Error> {
     debug!("First 10 bytes: {:?}", bloom_filter.get(..10));
 
     debug!("Restore bloom filter from bits.");
-    let bf = BloomFilter::new_with_data(239527, 17, &bloom_filter);
+    let bf = BloomFilter::new_with_data(239627, 17, &bloom_filter);
 
     debug!("Check if string is contained in filter.");
     //bf.contains(b"das.bit");
