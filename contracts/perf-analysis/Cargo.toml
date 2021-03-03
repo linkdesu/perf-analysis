@@ -7,3 +7,4 @@ edition = "2018"
 
 [dependencies]
 ckb-std = "0.7.1"
+das-bloom-filter = { path = "../../libs/das-bloom-filter" }

@@ -1,7 +1,28 @@
 use super::error::Error;
 use alloc::vec::Vec;
-use ckb_std::{ckb_constants::Source, error::SysError, syscalls};
+use ckb_std::{ckb_constants::Source, debug, error::SysError, syscalls};
 use core::result::Result;
+use das_bloom_filter::BloomFilter;
+
+pub fn main() -> Result<(), Error> {
+    bloom_test();
+    Ok(())
+}
+
+fn bloom_test() {
+    debug!("Define bloom filter bits.");
+    let bloom_filter = [];
+
+    debug!("Restore bloom filter from bits.");
+    let mut bf = BloomFilter::new_with_data(239627, 17, &bloom_filter);
+
+    debug!("Check if string is contained in filter.");
+    bf.contains(b"das.bit");
+}
+
+fn load_test() {
+    load_witnesses()?;
+}
 
 fn load_data<F: Fn(&mut [u8], usize) -> Result<usize, SysError>>(
     syscall: F,
@@ -41,9 +62,4 @@ pub fn load_witnesses() -> Result<Vec<Vec<u8>>, Error> {
     }
 
     Ok(witnesses)
-}
-
-pub fn main() -> Result<(), Error> {
-    load_witnesses()?;
-    Ok(())
 }

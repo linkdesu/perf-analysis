@@ -1,5 +1,9 @@
 [workspace]
-members = ["tests", "contracts/perf-analysis"]
+members = [
+    "tests",
+    "libs/das-bloom-filter",
+    "contracts/perf-analysis"
+]
 
 [profile.release]
 overflow-checks = true
