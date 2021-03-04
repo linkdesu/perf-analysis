@@ -1,9 +1,9 @@
 use super::error::Error;
 use alloc::vec::Vec;
 use ckb_std::{ckb_constants::Source, debug, error::SysError, syscalls};
+use core::convert::{TryFrom, TryInto};
 use core::result::Result;
 use das_bloom_filter::BloomFilter;
-use core::convert::{TryFrom, TryInto};
 
 pub fn main() -> Result<(), Error> {
     bloom_test()?;
@@ -11,15 +11,15 @@ pub fn main() -> Result<(), Error> {
 }
 
 fn bloom_test() -> Result<(), Error> {
-    debug!("Define bloom filter bits.");
-    let v_bloom_filter = load_data(|buf, offset| syscalls::load_witness(buf, offset, 0, Source::Input)).map_err(|e| Error::from(e))?;
+    debug!("Load bloom filter data from witnesses.");
+    let v_bloom_filter =
+        load_data(|buf, offset| syscalls::load_witness(buf, offset, 0, Source::Input))
+            .map_err(|e| Error::from(e))?;
     let first = v_bloom_filter.get(..4).unwrap();
     let u_first = u32::from_le_bytes(first.try_into().unwrap());
     let second = v_bloom_filter.get(4..8).unwrap();
     let u_second = u32::from_le_bytes(second.try_into().unwrap());
     let bloom_filter = v_bloom_filter.get(8..).unwrap();
-    
-    debug!("First 10 bytes: {:?}", bloom_filter.get(..10));
 
     debug!("Restore bloom filter from bits: {}", u_first);
     let bf = BloomFilter::new_with_data(u_first as u64, u_second as u64, &bloom_filter);

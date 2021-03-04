@@ -1,6 +1,6 @@
 use blake2b_ref::{Blake2b, Blake2bBuilder};
-use std::prelude::v1::*;
 use ckb_std::{ckb_constants::Source, debug, error::SysError, syscalls};
+use std::prelude::v1::*;
 
 fn make_hashers() -> Vec<Blake2b> {
     vec![
@@ -40,13 +40,13 @@ impl BloomFilter {
         let last = b_u8[len_minus1];
         for c in prefix_u8 {
             for j in -7..1 {
-                bv.push(c&(1<<(-j)) != 0);
+                bv.push(c & (1 << (-j)) != 0);
             }
         }
         let m = (bits_count_u % 8) as i32;
         let n = 1 - m;
         for k in n..1 {
-            bv.push(last&(1<<(-k)) != 0);
+            bv.push(last & (1 << (-k)) != 0);
         }
         Self {
             bits: bv,
@@ -165,9 +165,9 @@ impl BloomFilter {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use hex::encode;
     use rand::distributions::Alphanumeric;
     use rand::{thread_rng, Rng};
-    use hex::encode;
 
     #[cfg(feature = "std")]
     fn optimal_bits_count(capacity: f64, err_rate: f64) -> f64 {
